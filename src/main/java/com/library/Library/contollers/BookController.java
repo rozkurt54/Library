@@ -1,6 +1,9 @@
 package com.library.Library.contollers;
 
 import com.library.Library.business.abstracts.BookService;
+import com.library.Library.dtos.book.request.BookRequest;
+import com.library.Library.dtos.book.response.BookListResponse;
+import com.library.Library.dtos.book.response.BookResponse;
 import com.library.Library.entities.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +25,9 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAll() {
+    public ResponseEntity<List<BookListResponse>> getAll() {
 
-        List<Book> bookList = bookService.getAll();
+        List<BookListResponse> bookList = bookService.getAll();
         if(bookList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -32,8 +35,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}") //example.com/1
-    public ResponseEntity<Book> getById(@PathVariable Long id) {
-        Book book = bookService.getById(id);
+    public ResponseEntity<BookResponse> getById(@PathVariable Long id) {
+        BookResponse book = bookService.getById(id);
         if(Objects.nonNull(book)) {
             return new ResponseEntity<>(book, HttpStatus.OK);
         }
@@ -41,17 +44,17 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        Book book1 = bookService.add(book);
+    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
+        BookResponse book1 = bookService.add(bookRequest);
         if (Objects.nonNull(book1)) {
-            return new ResponseEntity<>(bookService.add(book), HttpStatus.OK);
+            return new ResponseEntity<>(book1, HttpStatus.OK);
         }
         return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        Book book1 = bookService.update(book, id);
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody Book book) {
+        BookResponse book1 = bookService.update(book, id);
         if (Objects.nonNull(book1)) {
             return new ResponseEntity<>(book1, HttpStatus.OK);
         }
