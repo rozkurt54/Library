@@ -42,7 +42,11 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public BookResponse add(BookRequest bookRequest) {
+    public BookResponse add(BookRequest bookRequest) throws Exception {
+
+        if(isExistBookByNameAndAuthorId(bookRequest.getName(), bookRequest.getAuthorId())) {
+            throw new Exception("Bu yazar için aynı isimde bir kitap daha önce kaydedilmiş");
+        }
 
         Book book = new Book();
         book.setName(bookRequest.getName());
@@ -55,13 +59,20 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public BookResponse update(Book book, Long id) {
+    public BookResponse update(BookRequest bookRequest, Long id) throws Exception {
+
+
+        if(isExistBookByNameAndAuthorId(bookRequest.getName(), bookRequest.getAuthorId())) {
+            throw new Exception("Bu yazar için aynı isimde bir kitap daha önce kaydedilmiş");
+        }
+
+
         Optional<Book> inDbBook = bookRepository.findById(id);
 
         if(inDbBook.isPresent()) {
             Book book1 = inDbBook.get();
-            book1.setName(book.getName());
-            book1.setPageCount(book.getPageCount());
+            book1.setName(bookRequest.getName());
+            book1.setPageCount(bookRequest.getPageCount());
 
             return BookModel.toBookResponse(bookRepository.save(book1));
         }
@@ -75,6 +86,9 @@ public class BookManager implements BookService {
         bookRepository.deleteById(id);
     }
 
+    private boolean isExistBookByNameAndAuthorId(String bookName, Long authorId) {
+        return bookRepository.existsByNameIgnoreCaseAndAuthor_Id(bookName, authorId);
+    }
 
 
 }

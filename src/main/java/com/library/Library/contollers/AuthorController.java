@@ -1,6 +1,5 @@
 package com.library.Library.contollers;
 
-
 import com.library.Library.business.abstracts.AuthorService;
 import com.library.Library.dtos.author.request.AuthorRequest;
 import com.library.Library.dtos.author.response.AuthorListResponse;
@@ -22,7 +21,6 @@ public class AuthorController {
     private final AuthorService authorService;
 
 
-
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
 
@@ -30,19 +28,25 @@ public class AuthorController {
 
     @GetMapping
     public ResponseEntity<List<AuthorListResponse>> getAll () {
+
         List<AuthorListResponse> authorListResponses = authorService.getAll();
+
         if(authorListResponses.isEmpty()) {
             ResponseEntity.noContent().build();
         }
+
         return new ResponseEntity<>(authorListResponses, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AuthorResponse> getById (@PathVariable Long id) {
+
         AuthorResponse authorResponse = authorService.getById(id);
+
         if(Objects.nonNull(authorResponse)) {
             return new ResponseEntity<>(authorResponse, HttpStatus.OK);
         }
+
         return ResponseEntity.badRequest().build();
     }
 
@@ -52,17 +56,21 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorResponse> add(@RequestBody AuthorRequest authorRequest) {
+    public ResponseEntity<AuthorResponse> add(@RequestBody AuthorRequest authorRequest) throws Exception{
+
         AuthorResponse authorResponse = authorService.add(authorRequest);
+
         if(Objects.nonNull(authorResponse)) {
             return new ResponseEntity<>(authorResponse, HttpStatus.OK);
         }
+
         return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorResponse> update(@PathVariable Long id, @RequestBody Author author) {
-        AuthorResponse response = authorService.update(id, author);
+    public ResponseEntity<AuthorResponse> update(@PathVariable Long id, @RequestBody AuthorRequest authorRequest) throws Exception {
+
+        AuthorResponse response = authorService.update(id, authorRequest);
         if(Objects.nonNull(response)) {
             return  new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -78,6 +86,7 @@ public class AuthorController {
             return new ResponseEntity<>(bookListResponseList, HttpStatus.OK);
 
         }
+
         return ResponseEntity.noContent().build();
     }
 }

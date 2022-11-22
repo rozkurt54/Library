@@ -28,23 +28,28 @@ public class BookController {
     public ResponseEntity<List<BookListResponse>> getAll() {
 
         List<BookListResponse> bookList = bookService.getAll();
+
         if(bookList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}") //example.com/1
     public ResponseEntity<BookResponse> getById(@PathVariable Long id) {
+
         BookResponse book = bookService.getById(id);
+
         if(Objects.nonNull(book)) {
             return new ResponseEntity<>(book, HttpStatus.OK);
         }
+
         return ResponseEntity.badRequest().build();
     }
 
     @PostMapping
-    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
+    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) throws Exception {
         BookResponse book1 = bookService.add(bookRequest);
         if (Objects.nonNull(book1)) {
             return new ResponseEntity<>(book1, HttpStatus.OK);
@@ -53,8 +58,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        BookResponse book1 = bookService.update(book, id);
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest) throws Exception{
+        BookResponse book1 = bookService.update(bookRequest, id);
         if (Objects.nonNull(book1)) {
             return new ResponseEntity<>(book1, HttpStatus.OK);
         }

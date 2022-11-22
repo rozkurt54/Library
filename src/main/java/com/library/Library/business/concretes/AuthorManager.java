@@ -40,18 +40,25 @@ public class AuthorManager implements AuthorService {
     }
 
     @Override
-    public AuthorResponse add(AuthorRequest authorRequest) {
+    public AuthorResponse add(AuthorRequest authorRequest) throws Exception {
+        if(isExistByName(authorRequest.getName())){
+            throw new Exception("Bu yazar daha önce kaydedilmiş");
+        }
+
         Author author = new Author();
         author.setName(authorRequest.getName());
         return toAuthorResponse(authorRepository.save(author));
     }
 
     @Override
-    public AuthorResponse update(Long id, Author author) {
+    public AuthorResponse update(Long id, AuthorRequest authorRequest) throws Exception {
+        if(isExistByName(authorRequest.getName())) {
+            throw new Exception("Bu isim daha önceden kaydedilmiş");
+        }
         Optional<Author> inDbAuthor = authorRepository.findById(id);
         if(inDbAuthor.isPresent()) {
             Author author1 = inDbAuthor.get();
-            author1.setName(author.getName());
+            author1.setName(authorRequest.getName());
             return toAuthorResponse(authorRepository.save(author1));
         }
         return null;
@@ -93,4 +100,12 @@ public class AuthorManager implements AuthorService {
         }
        return null;
     }
+
+    private boolean isExistByName (String authorName) {
+
+        return authorRepository.existsByNameIgnoreCase(authorName);
+
+    }
+
+
 }

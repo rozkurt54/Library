@@ -11,8 +11,8 @@ public interface BookService {
 
     List<BookListResponse> getAll();
     BookResponse getById(Long id);
-    BookResponse add(BookRequest bookRequest);
-    BookResponse update(Book book, Long id);
+    BookResponse add(BookRequest bookRequest) throws Exception;
+    BookResponse update(BookRequest bookRequest, Long id) throws Exception;
     void delete(Long id);
 
 
