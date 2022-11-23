@@ -1,6 +1,7 @@
 package com.library.Library.business.concretes;
 
 import com.library.Library.business.abstracts.AuthorService;
+import com.library.Library.business.abstracts.ImageService;
 import com.library.Library.core.Utils.BookModel;
 import com.library.Library.dataAccess.AuthorRepository;
 import com.library.Library.dtos.author.request.AuthorRequest;
@@ -9,11 +10,15 @@ import com.library.Library.dtos.author.response.AuthorResponse;
 import com.library.Library.dtos.book.response.BookListResponse;
 import com.library.Library.entities.Author;
 import com.library.Library.entities.Book;
+import com.library.Library.entities.Image;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +26,12 @@ public class AuthorManager implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
+    private final ImageService imageService;
 
-    public AuthorManager(AuthorRepository authorRepository) {
+
+    public AuthorManager(AuthorRepository authorRepository, ImageService imageService) {
         this.authorRepository = authorRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -107,5 +115,18 @@ public class AuthorManager implements AuthorService {
 
     }
 
+    @Override
+    public void createAuthorImage(Long authorId, MultipartFile multipartFile) throws Exception {
 
+        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+        if(optionalAuthor.isPresent()) {
+            Image image =   imageService.addImage(multipartFile);
+            Author author = optionalAuthor.get();
+            author.setImage(image);
+            authorRepository.save(author);
+            return;
+        }
+        throw new Exception("Author not Found");
+
+    }
 }

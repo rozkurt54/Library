@@ -5,10 +5,14 @@ import com.library.Library.dtos.author.request.AuthorRequest;
 import com.library.Library.dtos.author.response.AuthorListResponse;
 import com.library.Library.dtos.author.response.AuthorResponse;
 import com.library.Library.dtos.book.response.BookListResponse;
-import com.library.Library.entities.Author;
+
+import com.library.Library.entities.Image;
+
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -89,5 +93,28 @@ public class AuthorController {
 
         return ResponseEntity.noContent().build();
     }
+
+
+    @PostMapping("/{id}/image")
+    public void uploadImage(@PathVariable(name = "id") Long id, @RequestParam(name = "image") MultipartFile multipartFile) throws Exception {
+
+        authorService.createAuthorImage(id, multipartFile);
+
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Image> getAuthorImage(@PathVariable(name = "id") Long id) throws Exception {
+        Image image = authorService.getAuthorById(id).getImage();
+
+        if(Objects.nonNull(image)) {
+            return new ResponseEntity<Image>(image, HttpStatus.OK);
+        }
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+
+
 }
 

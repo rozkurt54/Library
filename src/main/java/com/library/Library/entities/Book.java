@@ -1,5 +1,6 @@
 package com.library.Library.entities;
 
+import com.library.Library.entities.abstracts.MyEntity;
 import lombok.*;
 
 
@@ -10,11 +11,12 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Book {
+public class Book  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
 
     private String name;
 
@@ -22,6 +24,9 @@ public class Book {
 
     @ManyToOne
     private Author author;
+
+    @ManyToOne
+    private Image image;
 
 
 }
