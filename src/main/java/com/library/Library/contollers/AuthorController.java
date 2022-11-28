@@ -6,6 +6,7 @@ import com.library.Library.dtos.author.response.AuthorListResponse;
 import com.library.Library.dtos.author.response.AuthorResponse;
 import com.library.Library.dtos.book.response.BookListResponse;
 
+import com.library.Library.dtos.image.ImageListResponse;
 import com.library.Library.entities.Image;
 
 import org.springframework.http.HttpStatus;
@@ -97,17 +98,15 @@ public class AuthorController {
 
     @PostMapping("/{id}/image")
     public void uploadImage(@PathVariable(name = "id") Long id, @RequestParam(name = "image") MultipartFile multipartFile) throws Exception {
-
         authorService.createAuthorImage(id, multipartFile);
-
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<Image> getAuthorImage(@PathVariable(name = "id") Long id) throws Exception {
-        Image image = authorService.getAuthorById(id).getImage();
+    public ResponseEntity<ImageListResponse> getAuthorImage(@PathVariable(name = "id") Long id) throws Exception {
+       ImageListResponse imageListResponse = authorService.getAuthorImage(id);
 
-        if(Objects.nonNull(image)) {
-            return new ResponseEntity<Image>(image, HttpStatus.OK);
+        if(Objects.nonNull(imageListResponse)) {
+            return new ResponseEntity<>(imageListResponse, HttpStatus.OK);
         }
 
         return ResponseEntity.noContent().build();

@@ -4,9 +4,10 @@ import com.library.Library.business.abstracts.ImageService;
 import com.library.Library.dataAccess.ImageRepository;
 import com.library.Library.dtos.image.ImageResponse;
 import com.library.Library.entities.Image;
-import com.library.Library.entities.abstracts.MyEntity;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -71,8 +72,19 @@ public class ImageManager implements ImageService {
     }
 
     @Override
-    public boolean deleteImage(Long imageId) {
-        return false;
+    @Transactional
+    public boolean deleteImage(Long imageId) throws Exception,IOException {
+
+        Image image = imageRepository.findById(imageId).orElseThrow(()-> new Exception("Image not found"));
+
+            String appPath = System.getProperty("user.dir");
+            Path path = Path.of(appPath + image.getPath());
+            System.out.println(path);
+            Files.delete(path);
+            imageRepository.deleteById(image.getId());
+
+        return true;
+
     }
 
     @Override
@@ -81,7 +93,7 @@ public class ImageManager implements ImageService {
         Optional<Image> image = imageRepository.findByFileName(name);
         if (image.isPresent()) {
             Path imagePath = Path.of(System.getProperty("user.dir") + image.get().getPath());
-            System.out.println(imagePath.toString());
+            System.out.println(imagePath);
             byte[] fileBytes = Files.readAllBytes(imagePath);
             ImageResponse imageResponse = new ImageResponse();
             imageResponse.setBytes(fileBytes);

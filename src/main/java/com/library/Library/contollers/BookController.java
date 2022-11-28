@@ -4,10 +4,12 @@ import com.library.Library.business.abstracts.BookService;
 import com.library.Library.dtos.book.request.BookRequest;
 import com.library.Library.dtos.book.response.BookListResponse;
 import com.library.Library.dtos.book.response.BookResponse;
+import com.library.Library.dtos.image.ImageListResponse;
 import com.library.Library.entities.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -72,4 +74,18 @@ public class BookController {
         bookService.delete(id);
     }
 
+    @GetMapping("/{id}/image")
+    public ResponseEntity<List<ImageListResponse>> getBookImages(@PathVariable Long id) throws Exception {
+
+        List<ImageListResponse> imageListResponseList = bookService.getBookImages(id);
+        if(imageListResponseList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>(imageListResponseList, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<ImageListResponse> uploadImage(@PathVariable(name = "id") Long id, @RequestParam(name = "image") MultipartFile multipartFile) throws Exception {
+        return new ResponseEntity<>(bookService.addBookImage(id, multipartFile), HttpStatus.OK);
+    }
 }

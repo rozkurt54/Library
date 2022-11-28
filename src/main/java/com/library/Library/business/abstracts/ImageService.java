@@ -18,7 +18,7 @@ public interface ImageService {
 
     Image updateImage(Long imageId, MultipartFile multipartFile);
 
-    boolean deleteImage(Long imageId);
+    boolean deleteImage(Long imageId) throws Exception;
 
     ImageResponse getImageFile(String name) throws IOException;
 

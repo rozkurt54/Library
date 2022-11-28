@@ -2,9 +2,12 @@ package com.library.Library.entities;
 
 import com.library.Library.entities.abstracts.MyEntity;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -25,8 +28,10 @@ public class Book  {
     @ManyToOne
     private Author author;
 
-    @ManyToOne
-    private Image image;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable
+    private List<Image> images;
+
 
 
 }

@@ -21,7 +21,7 @@ public class Author{
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> bookList;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
 

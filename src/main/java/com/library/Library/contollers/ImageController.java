@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/api/v1/images")
 public class ImageController {
 
     private ImageService imageService;
@@ -30,6 +30,11 @@ public class ImageController {
                return new ResponseEntity<>(imageResponse.getBytes(), headers, HttpStatus.OK);
            }
            return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteImageById(@PathVariable Long id) throws Exception {
+        return imageService.deleteImage(id);
     }
 
 }

@@ -3,11 +3,14 @@ package com.library.Library.business.concretes;
 import com.library.Library.business.abstracts.AuthorService;
 import com.library.Library.business.abstracts.ImageService;
 import com.library.Library.core.Utils.BookModel;
+import com.library.Library.core.Utils.ImageModel;
 import com.library.Library.dataAccess.AuthorRepository;
 import com.library.Library.dtos.author.request.AuthorRequest;
 import com.library.Library.dtos.author.response.AuthorListResponse;
 import com.library.Library.dtos.author.response.AuthorResponse;
 import com.library.Library.dtos.book.response.BookListResponse;
+import com.library.Library.dtos.image.ImageListResponse;
+import com.library.Library.dtos.image.ImageResponse;
 import com.library.Library.entities.Author;
 import com.library.Library.entities.Book;
 import com.library.Library.entities.Image;
@@ -127,6 +130,13 @@ public class AuthorManager implements AuthorService {
             return;
         }
         throw new Exception("Author not Found");
+
+    }
+
+    public ImageListResponse getAuthorImage(Long authorId) throws Exception {
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new Exception("Author not found"));
+        Image image = author.getImage();
+        return ImageModel.toModel(image);
 
     }
 }
