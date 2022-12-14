@@ -7,6 +7,7 @@ import com.library.Library.dtos.image.ImageListResponse;
 import com.library.Library.entities.Book;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BookService {
@@ -19,4 +20,6 @@ public interface BookService {
     List<ImageListResponse> getBookImages(Long bookId) throws Exception;
 
     ImageListResponse addBookImage(Long id, MultipartFile multipartFile) throws Exception;
+
+    void deleteBookImage(Long bookId, Long imageId) throws IOException;
 }

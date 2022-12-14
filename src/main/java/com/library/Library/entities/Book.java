@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,9 +29,9 @@ public class Book  {
     @ManyToOne
     private Author author;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable
-    private List<Image> images;
+    @OneToMany
+    @JoinTable(name = "book_images", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private List<Image> images = new ArrayList<>();
 
 
 

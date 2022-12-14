@@ -22,9 +22,6 @@ public interface AuthorService {
 
     void delete(Long id);
 
-    AuthorResponse toAuthorResponse(Author author);
-
-    AuthorListResponse toAuthorListResponse(Author author);
 
     Author getAuthorById(Long id);
 
@@ -32,6 +29,8 @@ public interface AuthorService {
 
     void createAuthorImage(Long authorId, MultipartFile multipartFile) throws Exception;
 
-    ImageListResponse getAuthorImage(Long authorId) throws Exception;
+    List<ImageListResponse> getAuthorImages(Long authorId) throws Exception;
+
+    void deleteAuthorImage(Long authorId, Long imageId) throws IOException;
 
 }

@@ -5,16 +5,13 @@ import com.library.Library.dtos.author.request.AuthorRequest;
 import com.library.Library.dtos.author.response.AuthorListResponse;
 import com.library.Library.dtos.author.response.AuthorResponse;
 import com.library.Library.dtos.book.response.BookListResponse;
-
 import com.library.Library.dtos.image.ImageListResponse;
-import com.library.Library.entities.Image;
-
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,17 +99,21 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<ImageListResponse> getAuthorImage(@PathVariable(name = "id") Long id) throws Exception {
-       ImageListResponse imageListResponse = authorService.getAuthorImage(id);
+    public ResponseEntity<List<ImageListResponse>> getAuthorImage(@PathVariable(name = "id") Long id) throws Exception {
+       List<ImageListResponse> imageListResponse = authorService.getAuthorImages(id);
 
-        if(Objects.nonNull(imageListResponse)) {
+        if(!imageListResponse.isEmpty()) {
             return new ResponseEntity<>(imageListResponse, HttpStatus.OK);
         }
 
         return ResponseEntity.noContent().build();
-
     }
 
+    @DeleteMapping("/{authorId}/image/{imageId}")
+    public void deleteAuthorImage(@PathVariable(name = "authorId") Long authorId,
+                                  @PathVariable(name = "imageId") Long imageId) throws IOException {
+        authorService.deleteAuthorImage(authorId,imageId);
+    }
 
 
 }

@@ -15,6 +15,8 @@ public class BookModel {
         bookListResponse.setId(book.getId());
         bookListResponse.setName(book.getName());
         bookListResponse.setPageCount(book.getPageCount());
+        bookListResponse.setAuthorId(book.getAuthor().getId());
+        bookListResponse.setImages(ImageModel.toModelList(book.getImages()));
 
         return bookListResponse;
 
@@ -27,6 +29,8 @@ public class BookModel {
         bookResponse.setId(book.getId());
         bookResponse.setName(book.getName());
         bookResponse.setPageCount(book.getPageCount());
+        bookResponse.setAuthorId(book.getAuthor().getId());
+        bookResponse.setImages(ImageModel.toModelList(book.getImages()));
 
         if(book.getAuthor() != null) {
             bookResponse.setAuthorId(book.getAuthor().getId());

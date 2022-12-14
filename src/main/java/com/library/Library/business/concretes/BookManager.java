@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -115,5 +116,16 @@ public class BookManager implements BookService {
         book.setImages(imageList);
         bookRepository.save(book);
         return ImageModel.toModel(image);
+    }
+
+    @Override
+    public void deleteBookImage(Long bookId, Long imageId) throws IOException {
+        Book book = bookRepository.findById(bookId).orElseThrow(()-> new RuntimeException("Book not found"));
+        List<Image> bookImageList = book.getImages();
+        Image image = imageService.getImageById(imageId);
+        bookImageList.remove(image);
+        bookRepository.save(book);
+        imageService.deleteImage(imageId);
+
     }
 }

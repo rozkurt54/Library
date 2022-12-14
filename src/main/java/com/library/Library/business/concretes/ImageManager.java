@@ -42,9 +42,16 @@ public class ImageManager implements ImageService {
     @Override
     public Image addImage(MultipartFile multipartFile) throws IOException {
         String appPath = System.getProperty("user.dir");
-        String fileName = multipartFile.getOriginalFilename();
-        String fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
+        String fileExt;
         String contentType = multipartFile.getContentType();
+        assert contentType != null;
+        if(contentType.equals("image/jpeg")) {
+            fileExt = "jpg";
+        } else if (contentType.equals("image/png")){
+            fileExt = "png";
+        } else {
+            throw new IOException("File type not allowed");
+        }
 
         MediaType myMediaType = MediaType.valueOf(contentType);
         UUID uuid = UUID.randomUUID();
@@ -73,14 +80,14 @@ public class ImageManager implements ImageService {
 
     @Override
     @Transactional
-    public boolean deleteImage(Long imageId) throws Exception,IOException {
+    public boolean deleteImage(Long imageId) throws IOException {
 
-        Image image = imageRepository.findById(imageId).orElseThrow(()-> new Exception("Image not found"));
+        Image image = imageRepository.findById(imageId).orElseThrow(()-> new RuntimeException("Image not found"));
 
             String appPath = System.getProperty("user.dir");
             Path path = Path.of(appPath + image.getPath());
-            System.out.println(path);
-            Files.delete(path);
+
+              Files.delete(path);
             imageRepository.deleteById(image.getId());
 
         return true;
@@ -102,4 +109,10 @@ public class ImageManager implements ImageService {
         }
         return null;
     }
+
+    @Override
+    public Image getImageById(Long id) {
+        return imageRepository.findById(id).orElseThrow(()-> new RuntimeException("Image not found"));
+    }
 }
+

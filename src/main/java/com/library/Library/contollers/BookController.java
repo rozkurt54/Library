@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,5 +88,12 @@ public class BookController {
     @PostMapping("/{id}/image")
     public ResponseEntity<ImageListResponse> uploadImage(@PathVariable(name = "id") Long id, @RequestParam(name = "image") MultipartFile multipartFile) throws Exception {
         return new ResponseEntity<>(bookService.addBookImage(id, multipartFile), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/image/{imageId}")
+    public void deleteImageBook(@PathVariable(name = "id") Long bookId, @PathVariable(name = "imageId") Long imageId) throws IOException {
+
+        bookService.deleteBookImage(bookId, imageId);
+
     }
 }

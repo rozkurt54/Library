@@ -3,11 +3,17 @@ package com.library.Library.dtos.author.response;
 import com.library.Library.dtos.image.ImageListResponse;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class AuthorListResponse {
 
     private Long id;
     private String name;
-    private ImageListResponse imageListResponse;
+
+    private List<ImageListResponse> images;
+
+    private int bookCount;
+
 
 }
