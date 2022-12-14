@@ -9,7 +9,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     boolean existsByNameIgnoreCase(String name);
 
-    List<Author> findAllByBookList
+
 
     long countByImageEmpty();
 
